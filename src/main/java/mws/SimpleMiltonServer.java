@@ -13,10 +13,8 @@ public class SimpleMiltonServer {
 	static String homeFolder = "D:\\";
 
 	public static void main(String[] args) {
-//		一个ResourceFactory、一个HttpManagerBuilder、一个SimpletonServer
-		FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder),
-				new NullSecurityManager(), "/");
-		resourceFactory.getContentService();
+		NullSecurityManager nsm = new NullSecurityManager();
+		FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder), nsm, "/");
 		resourceFactory.setAllowDirectoryBrowsing(true);
 		HttpManagerBuilder b = new HttpManagerBuilder();
 		b.setEnableFormAuth(false);
