@@ -169,33 +169,7 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
         XmlWriter w = new XmlWriter(out);
         w.open("html");
         w.open("head");
-        w.writeText(""
-                + "<meta charset=\"UTF-8\">\n"
-                + "<script type=\"text/javascript\" language=\"javascript1.1\">\n"
-                + "    var fNewDoc = false;\n"
-                + "  </script>\n"
-                + "  <script LANGUAGE=\"VBSCRIPT\">\n"
-                + "    On Error Resume Next\n"
-                + "    Set EditDocumentButton = CreateObject(\"SharePoint.OpenDocuments.3\")\n"
-                + "    fNewDoc = IsObject(EditDocumentButton)\n"
-                + "  </script>\n"
-                + "  <script type=\"text/javascript\" language=\"javascript1.1\">\n"
-                + "    var L_EditDocumentError_Text = \"The edit feature requires a SharePoint-compatible application and Microsoft Internet Explorer 4.0 or greater.\";\n"
-                + "    var L_EditDocumentRuntimeError_Text = \"Sorry, couldnt open the document.\";\n"
-                + "    function editDocument(strDocument) {\n"
-				+ "      strDocument = 'http://192.168.1.2:8080' + strDocument; "
-                + "      if (fNewDoc) {\n"
-                + "        if (!EditDocumentButton.EditDocument(strDocument)) {\n"
-                + "          alert(L_EditDocumentRuntimeError_Text + ' - ' + strDocument); \n"
-                + "        }\n"
-                + "      } else { \n"
-                + "        alert(L_EditDocumentError_Text + ' - ' + strDocument); \n"
-                + "      }\n"
-                + "    }\n"
-                + "  </script>\n");
-
-
-
+        w.writeText("<meta charset=\"UTF-8\">\n");
         w.close("head");
         w.open("body");
         w.begin("h1").open().writeText(this.getName()).close();
@@ -239,7 +213,11 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
         if (!abUrl.endsWith("/")) {
             abUrl += "/";
         }
+
         if (ssoPrefix == null) {
+        	if (!abUrl.startsWith("/")) {
+                abUrl = "/" + abUrl;
+            }
             return abUrl + name;
         } else {
             // This is to match up with the prefix set on SimpleSSOSessionProvider in MyCompanyDavServlet
