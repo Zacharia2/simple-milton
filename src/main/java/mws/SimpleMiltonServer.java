@@ -1,6 +1,7 @@
 package mws;
 
 import java.io.File;
+import java.util.Locale;
 
 import io.milton.config.HttpManagerBuilder;
 import io.milton.http.HttpManager;
@@ -13,6 +14,7 @@ public class SimpleMiltonServer {
 	static String homeFolder = "D:\\";
 
 	public static void main(String[] args) {
+		Locale.setDefault(Locale.ENGLISH);
 		NullSecurityManager nsm = new NullSecurityManager();
 		FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder), nsm, "/");
 		resourceFactory.setAllowDirectoryBrowsing(true);
