@@ -36,7 +36,7 @@ import static io.milton.http.ResponseStatus.SC_FORBIDDEN;
  * Represents a directory in a physical file system.
  *
  */
-public class FsDirectoryResource extends FsResource implements MakeCollectionableResource, PutableResource, CopyableResource, DeletableResource, MoveableResource, PropFindableResource, LockingCollectionResource, GetableResource {
+public class FsDirectoryResource extends FsResource implements MakeCollectionableResource, PutableResource, CopyableResource, DeletableResource, MoveableResource, PropFindableResource, LockingCollectionResource, GetableResource, QuotaResource {
 
     private static final Logger log = LoggerFactory.getLogger(FsDirectoryResource.class);
 
@@ -233,4 +233,38 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
         s += abUrl.substring(pos);
         return s;
     }
+    
+    private Boolean isRootDirectory() {
+        try {
+            return getFile().getCanonicalPath().equals(factory.getRoot().getCanonicalPath());
+        } catch (IOException e) {
+            log.error("Failed to determine if directory is root", e);
+            return false;
+        }
+    }
+
+	@Override
+	public Long getQuotaUsed() {
+		if(!isRootDirectory()) {
+			return null;
+		}
+	    long totalSpace = getFile().getTotalSpace();
+	    long freeSpace = getFile().getFreeSpace();
+	    if (totalSpace < 0 || freeSpace < 0) {
+	        return null;
+	    }
+	    return totalSpace - freeSpace;
+	}
+
+	@Override
+	public Long getQuotaAvailable() {
+		if(!isRootDirectory()) {
+			return null;
+		}
+		long freeSpace = getFile().getFreeSpace();
+	    if (freeSpace < 0) {
+	        return null;
+	    }
+	    return freeSpace;
+	}
 }

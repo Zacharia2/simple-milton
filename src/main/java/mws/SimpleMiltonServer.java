@@ -21,6 +21,7 @@ public class SimpleMiltonServer {
 		HttpManagerBuilder b = new HttpManagerBuilder();
 		b.setEnableFormAuth(false);
 		b.setResourceFactory(resourceFactory);
+		b.setEnableQuota(true);
 		HttpManager httpManager = b.buildHttpManager();
 		SimpletonServer ss = new SimpletonServer(httpManager, b.getOuterWebdavResponseHandler(), 100, 10);
 		ss.setHttpPort(port);
